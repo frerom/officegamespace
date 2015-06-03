@@ -2,6 +2,20 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
+    body {
+      background: lightgrey;
+    }
+
+    .classic-control {
+      background: grey;
+      border-radius: 200px 150px;
+      box-sizing: border-box;
+    }
+
+    .classic-control-controls {
+      margin: 10px;
+    }
+
     .classic-control-navigation {
       position: relative;
       display: inline-block;
@@ -23,13 +37,12 @@
     }
 
     .classic-control-button:active {
-      background: grey;
+      background: darkgrey;
       color: black;
     }
 
     .classic-control-button:focus {
       outline: none;
-      background: grey;
     }
 
     .classic-control-up {
@@ -89,6 +102,7 @@
       background: red;
     }
   </style>
+  <script>localStorage.debug = '*';</script>
 </head>
 <body>
   <script src="js/app.js"></script>

@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "watch": "./node_modules/.bin/webpack -d --watch"
+    "watch": "./node_modules/.bin/webpack -d --watch",
+    "dev": ".node_modules/.bin/webpack -d",
+    "prod": ".node_modules/.bin/webpack -p"
   },
   "devDependencies": {
     "babel-core": "~5.4.7",

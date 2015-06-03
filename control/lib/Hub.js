@@ -6,22 +6,22 @@ const Hub = function (url) {
   return {
     actions: {
       onUp() {
-        socket.emit('up')
+        socket.emit('input', 'up')
       },
       onDown() {
-        socket.emit('down')
+        socket.emit('input', 'down')
       },
       onLeft() {
-        socket.emit('left')
+        socket.emit('input', 'left')
       },
       onRight() {
-        socket.emit('right')
+        socket.emit('input', 'right')
       },
       onA() {
-        socket.emit('a')
+        socket.emit('input', 'a')
       },
       onB() {
-        socket.emit('b')
+        socket.emit('input', 'b')
       }
     }
   }
