@@ -2,6 +2,7 @@ import io from 'socket.io-client'
 
 const Hub = function (url) {
   const socket = io(url)
+  socket.emit('i am a', 'controller')
 
   return {
     actions: {

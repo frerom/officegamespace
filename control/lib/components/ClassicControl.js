@@ -8,14 +8,14 @@ class ClassicControl extends React.Component {
       <div className="classic-control">
         <div className="classic-control-controls">
           <div className="classic-control-navigation">
-            <button onMouseDown={onUp}    className="classic-control-button classic-control-up">U</button>
-            <button onMouseDown={onDown}  className="classic-control-button classic-control-down">D</button>
-            <button onMouseDown={onLeft}  className="classic-control-button classic-control-left">L</button>
-            <button onMouseDown={onRight} className="classic-control-button classic-control-right">R</button>
+            <button onTouchStart={onUp}    className="classic-control-button classic-control-up">U</button>
+            <button onTouchStart={onDown}  className="classic-control-button classic-control-down">D</button>
+            <button onTouchStart={onLeft}  className="classic-control-button classic-control-left">L</button>
+            <button onTouchStart={onRight} className="classic-control-button classic-control-right">R</button>
           </div>
           <div className="classic-control-actions">
-            <button onMouseDown={onA}     className="classic-control-button classic-control-a">A</button>
-            <button onMouseDown={onB}     className="classic-control-button classic-control-b">B</button>
+            <button onTouchStart={onA} className="classic-control-button classic-control-a">A</button>
+            <button onTouchStart={onB} className="classic-control-button classic-control-b">B</button>
           </div>
         </div>
       </div>
