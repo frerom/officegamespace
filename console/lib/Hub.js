@@ -7,6 +7,9 @@ const Hub = function (url) {
   return {
     onInput(c) {
       socket.on('input', c)
+    },
+    onPlayerConnected(c) {
+      socket.on('player connected', c)
     }
   }
 }

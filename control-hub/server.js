@@ -12,10 +12,27 @@ var setConsole = function (socket) {
   gameConsole = socket;
 };
 
-var addController = function (socket) {
+var createPlayerColor = function (players) {
+  var colors = ['blue', 'red', 'yellow', 'green', 'purple', 'brown', 'pink', 'orange']
+  var unUsedColors = colors.filter(function (color) { return players.indexOf(color) === -1 })
+  return unUsedColors[0];
+};
+
+var players = [];
+var addPlayer = function (socket) {
+  var playerColor = createPlayerColor(players);
+  players.push(playerColor);
+
+  process.nextTick(function () {
+    gameConsole.emit('player connected', playerColor);
+  });
+
   socket.on('input', function (input) {
-    console.log('input ' + input + ' recieved');
-    gameConsole.emit('input', input);
+    console.log(playerColor + ': ' + input);
+    gameConsole.emit('input', {
+      input: input,
+      color: playerColor
+    });
   });
 };
 
@@ -23,7 +40,7 @@ io.on('connect', function (socket) {
   socket.on('i am a', function (type) {
     console.log(type, 'connected');
     switch (type) {
-      case 'controller': addController(socket); break;
+      case 'controller': addPlayer(socket); break;
       case 'console': setConsole(socket); break;
     }
   });
