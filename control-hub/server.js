@@ -23,9 +23,7 @@ var addPlayer = function (socket) {
   var playerColor = createPlayerColor(players);
   players.push(playerColor);
 
-  process.nextTick(function () {
-    gameConsole.emit('player connected', playerColor);
-  });
+  gameConsole.emit('player connected', playerColor);
 
   socket.on('input', function (input) {
     console.log(playerColor + ': ' + input);
