@@ -1,5 +1,5 @@
 import React from 'react'
-import Hub from './hub'
+import Game from './Game'
 
 const Main = React.createClass({
   getInitialState() {
@@ -9,7 +9,7 @@ const Main = React.createClass({
     }
   },
   componentWillMount() {
-    const hub = Hub('localhost:3000')
+    /*const hub = Hub('localhost:3000')
     this.setState({ hub })
 
     hub.onPlayerConnected(player => {
@@ -23,7 +23,10 @@ const Main = React.createClass({
 
       players[input.color].push(input.input)
       this.setState({ players })
-    })
+    })*/
+  },
+  componentDidMount() {
+    Game(this.refs.canvas.getDOMNode())
   },
   render() {
     var inputs = Object.keys(this.state.players).map(playerColor => {
@@ -34,7 +37,9 @@ const Main = React.createClass({
       )
     })
     return (
-      <div>{inputs}</div>
+      <div>
+        <canvas ref='canvas'/>
+      </div>
     )
   }
 })
