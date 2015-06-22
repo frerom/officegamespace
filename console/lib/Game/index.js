@@ -1,10 +1,9 @@
 import Hub from '../Hub'
 
-const Game = function (canvas) {
+const Game = function (canvas, hub) {
 	const size = 700;
 	canvas.width = size;
 	canvas.height = size;
-	const hub = Hub('localhost:3000')
 	const players = [];
 	const ctx = canvas.getContext("2d");
 	hub.onPlayerConnected(color => players.push({ color, x : Math.random() * (size -20) + 20, y : Math.random() * (size -20) + 20  }));

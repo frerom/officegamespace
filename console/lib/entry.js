@@ -1,4 +1,7 @@
 import React from 'react'
 import Main from './main'
+import Hub from './Hub'
 
-React.render(<Main />, document.body)
+const hub = Hub('localhost:3000')
+
+React.render(<Main hub={hub} />, document.body)
