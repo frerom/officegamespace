@@ -4,7 +4,7 @@ const Game = function (canvas, hub) {
 	const size = 700;
 	canvas.width = size;
 	canvas.height = size;
-	const players = [];
+	var players = [];
 	const ctx = canvas.getContext("2d");
 	var currentTime = new Date();
 
@@ -16,12 +16,15 @@ const Game = function (canvas, hub) {
 			controls: {
 				accelerate: false,
 				left: false,
-				right: false
+				right: false,
+				device: {x:0, y:0 , z:0}
 			},
 			speed: 50,
 			rotationSpeed: 4,
 			rotation: 0   
 		}));
+
+	hub.onPlayerDisconnected(color => { players = players.filter(player => player.color != color) });
 
 	hub.onInput(input => {
 		console.log(input);
@@ -36,6 +39,15 @@ const Game = function (canvas, hub) {
 		});
 	})
 
+	hub.onDeviceMotion(input => {
+		players.filter(p => p.color === input.color).forEach(player => {
+			player.controls.device.x = input.input.x;
+			player.controls.device.y = input.input.y;
+			player.controls.device.z = input.input.z;
+			console.log(player.controls.device.y);
+		});
+	})
+
 	const loop = function() {
 		var oldTime = currentTime;
 		currentTime = new Date();
@@ -43,8 +55,10 @@ const Game = function (canvas, hub) {
 		players.forEach(p => {
 			if (p.controls.accelerate) p.x+= p.speed*Math.cos(p.rotation)*deltaTime/1000;
 			if (p.controls.accelerate) p.y+= p.speed*Math.sin(p.rotation)*deltaTime/1000;
-			if (p.controls.left) p.rotation-= p.rotationSpeed*deltaTime/1000;
-			if (p.controls.right) p.rotation+= p.rotationSpeed*deltaTime/1000;
+			//if (p.controls.left) p.rotation-= p.rotationSpeed*deltaTime/1000;
+			//if (p.controls.right) p.rotation+= p.rotationSpeed*deltaTime/1000;
+			if (p.controls.device.y > 4) p.rotation-= p.rotationSpeed*deltaTime/1000;
+			if (p.controls.device.y < -4) p.rotation+= p.rotationSpeed*deltaTime/1000;
 		})
 		animate();
 		requestAnimationFrame(loop);

@@ -49,6 +49,13 @@ var addPlayer = function (socket) {
       color: playerColor
     });
   });
+
+  socket.on('device motion', function (input) {
+    gameConsole.emit('device motion', {
+      input: input,
+      color: playerColor
+    });
+  });
 };
 
 io.on('connect', function (socket) {

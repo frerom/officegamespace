@@ -2,6 +2,9 @@ import React from 'react'
 import assign from 'object-assign'
 
 class ClassicControl extends React.Component {
+  componentWillMount() {
+    window.ondevicemotion = (event) => this.props.actions.deviceMotion(event);
+  }
   render() {
     const { onUpStart, onDownStart, onLeftStart, onRightStart, onAStart, onBStart,
             onUpEnd, onDownEnd, onLeftEnd, onRightEnd, onAEnd, onBEnd } = this.props.actions

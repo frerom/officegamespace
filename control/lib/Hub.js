@@ -5,6 +5,7 @@ const Hub = function (url) {
   socket.emit('i am a', 'controller')
 
   const sendInput = (button, state) => () => socket.emit('input', { button, state })
+  const sendDeviceMotion = (event) => socket.emit('device motion', event.accelerationIncludingGravity)
 
   return {
     actions: {
@@ -24,7 +25,9 @@ const Hub = function (url) {
       onAEnd: sendInput('a', 'end'),
 
       onBStart: sendInput('b', 'start'),
-      onBEnd: sendInput('b', 'end')
+      onBEnd: sendInput('b', 'end'),
+
+      deviceMotion: sendDeviceMotion
     }
   }
 }
