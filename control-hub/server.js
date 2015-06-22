@@ -3,8 +3,18 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
 
-app.get('/', function(req, res){
-  res.sendFile(path.resolve( __dirname + '/../console/index.html'));
+app.get('/console/*', function (req, res) {
+  res.sendFile(path.resolve(__dirname + '/../console/dist/' + (req.params[0] || 'index.html')));
+});
+app.get('/console', function (req, res) {
+  res.redirect('/console/')
+});
+
+app.get('/controller/*', function (req, res) {
+  res.sendFile(path.resolve(__dirname + '/../control/dist/' + (req.params[0] || 'index.html')));
+});
+app.get('/controller', function (req, res) {
+  res.redirect('/controller/')
 });
 
 var gameConsole;
