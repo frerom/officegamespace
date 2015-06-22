@@ -3,7 +3,8 @@ import assign from 'object-assign'
 
 class ClassicControl extends React.Component {
   render() {
-    const { onUp, onDown, onLeft, onRight, onA, onB } = this.props.actions
+    const { onUpStart, onDownStart, onLeftStart, onRightStart, onAStart, onBStart,
+            onUpEnd, onDownEnd, onLeftEnd, onRightEnd, onAEnd, onBEnd } = this.props.actions
     return (
       <div className="classic-control">
         <div className="classic-control-controls">
