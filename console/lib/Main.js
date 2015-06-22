@@ -4,41 +4,21 @@ import Game from './Game'
 const Main = React.createClass({
   getInitialState() {
     return {
-      hub: {},
+      qr: '',
       players: {}
     }
   },
   componentWillMount() {
-    /*const hub = Hub('localhost:3000')
-    this.setState({ hub })
-
-    hub.onPlayerConnected(player => {
-      const players = this.state.players;
-      players[player] = []
-      this.setState({ players })
-    })
-
-    hub.onInput(input => {
-      const players = this.state.players
-
-      players[input.color].push(input.input)
-      this.setState({ players })
-    })*/
+    this.props.hub.onQr(qr => this.setState({qr}))
   },
   componentDidMount() {
-    Game(this.refs.canvas.getDOMNode())
+    Game(this.refs.canvas.getDOMNode(), this.props.hub)
   },
   render() {
-    var inputs = Object.keys(this.state.players).map(playerColor => {
-      return (
-        <div style={{background: playerColor, color: 'black'}} key={Math.random() * 1000000000}>
-          {this.state.players[playerColor].map(input => <div>{input}</div>)}
-        </div>
-      )
-    })
     return (
       <div>
         <canvas ref='canvas'/>
+        <img style={{ position: 'fixed', bottom: '20px', right: '20px'}} src={this.state.qr} />
       </div>
     )
   }

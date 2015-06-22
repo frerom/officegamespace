@@ -2,6 +2,12 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
+var ip = require('ip');
+var qr = require('qr-encode');
+
+var port = 3000;
+
+var qrCode = qr(ip.address() + ':' + port + '/controller', { type: 6, size: 3, level: 'Q'})
 
 app.get('/console/*', function (req, res) {
   res.sendFile(path.resolve(__dirname + '/../console/dist/' + (req.params[0] || 'index.html')));
@@ -20,6 +26,7 @@ app.get('/controller', function (req, res) {
 var gameConsole;
 var setConsole = function (socket) {
   gameConsole = socket;
+  socket.emit('qr', qrCode);
 };
 
 var createPlayerColor = function (players) {
@@ -54,6 +61,6 @@ io.on('connect', function (socket) {
   });
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(port, function(){
+  console.log('listening on *:' + port);
 });

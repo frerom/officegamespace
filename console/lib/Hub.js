@@ -10,6 +10,9 @@ const Hub = function (url) {
     },
     onPlayerConnected(c) {
       socket.on('player connected', c)
+    },
+    onQr(c) {
+      socket.on('qr', c)
     }
   }
 }
