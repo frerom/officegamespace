@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "watch": "./node_modules/.bin/webpack -d --watch",
+    "dev": "./node_modules/.bin/webpack -d",
+    "prod": "./node_modules/.bin/webpack -p",
+    "start": "node ./control-hub/server.js"
+  },
+  "devDependencies": {
+    "node-libs-browser": "~0.5.2",
+    "webpack": "~1.9.11"
+  }
+}
