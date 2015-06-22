@@ -7,37 +7,75 @@ const Game = function (canvas) {
 	const hub = Hub('localhost:3000')
 	const players = [];
 	const ctx = canvas.getContext("2d");
-	hub.onPlayerConnected(color => players.push({ color, x : Math.random() * (size -20) + 20, y : Math.random() * (size -20) + 20  }));
+	var currentTime = new Date();
+
+	hub.onPlayerConnected(color => players.push(
+		{ 
+			color, 
+			x : Math.random() * (size -20) + 20, 
+			y : Math.random() * (size -20) + 20,
+			controls: {
+				accelerate: false,
+				left: false,
+				right: false
+			},
+			speed: 50,
+			rotationSpeed: 4,
+			rotation: 0   
+		}));
 
 	hub.onInput(input => {
+		console.log(input);
 		players.filter(p => p.color === input.color).forEach(player => {
-			if (input.input === 'up')
-				player.y -= 10;
-			if (input.input === 'down')
-				player.y += 10;
-			if (input.input === 'left')
-				player.x -= 10;
-			if (input.input === 'right')
-				player.x += 10;
+			if (input.input.button === 'up') 
+				player.controls.accelerate = input.input.state === 'start' ? true : false
+			else if (input.input.button === 'left') 
+				player.controls.left = input.input.state === 'start' ? true : false
+			else if (input.input.button === 'right') 
+				player.controls.right = input.input.state === 'start' ? true : false
+			console.log(player.controls.accelerate);
 		});
 	})
 
-    const drawBall = function (ball) {
+	const loop = function() {
+		var oldTime = currentTime;
+		currentTime = new Date();
+		var deltaTime = currentTime - oldTime;
+		players.forEach(p => {
+			if (p.controls.accelerate) p.x+= p.speed*Math.cos(p.rotation)*deltaTime/1000;
+			if (p.controls.accelerate) p.y+= p.speed*Math.sin(p.rotation)*deltaTime/1000;
+			if (p.controls.left) p.rotation-= p.rotationSpeed*deltaTime/1000;
+			if (p.controls.right) p.rotation+= p.rotationSpeed*deltaTime/1000;
+		})
+		animate();
+		requestAnimationFrame(loop);
+	}
+
+    const drawBall = function (ball, size) {
     	ctx.beginPath();
-      	ctx.arc(ball.x, ball.y, 20, 0, 2 * Math.PI, false);
+      	ctx.arc(ball.x, ball.y, size, 0, 2 * Math.PI, false);
       	ctx.closePath();
-      	ctx.fillStyle = ball.color;
       	ctx.fill();
+    }
+
+    const drawPlayer = function (player) {
+      	ctx.fillStyle = player.color;
+    	drawBall(player, 20);
+    	ctx.save();
+    	ctx.translate(player.x, player.y);
+    	ctx.rotate(player.rotation);
+    	ctx.translate(8, 0);
+    	ctx.fillStyle = 'black';
+    	drawBall({x: 0, y: 0}, 5);
+    	ctx.restore();
     }
 
 	const animate = function() {
 		ctx.clearRect(0, 0, size, size)
-		players.forEach(drawBall)
-
-		requestAnimationFrame(animate)
+		players.forEach(drawPlayer)
 	}
 
-	animate()
+	loop();
 
 }
 
