@@ -19,7 +19,10 @@ const Game = function (canvas, hub) {
 				right: false,
 				device: {x:0, y:0 , z:0}
 			},
-			speed: 50,
+			maxAcceleration: 2,
+			maxSpeed: 100,
+			speed : { x: 0, y: 0 },
+			acceleration : { x: 0, y: 0 },
 			rotationSpeed: 4,
 			rotation: 0   
 		}));
@@ -53,12 +56,30 @@ const Game = function (canvas, hub) {
 		currentTime = new Date();
 		var deltaTime = currentTime - oldTime;
 		players.forEach(p => {
-			if (p.controls.accelerate) p.x+= p.speed*Math.cos(p.rotation)*deltaTime/1000;
-			if (p.controls.accelerate) p.y+= p.speed*Math.sin(p.rotation)*deltaTime/1000;
+			if (Math.abs(p.controls.device.y) > 0.5) p.rotation-= (p.controls.device.y/5)*p.rotationSpeed*deltaTime/1000;
 			//if (p.controls.left) p.rotation-= p.rotationSpeed*deltaTime/1000;
 			//if (p.controls.right) p.rotation+= p.rotationSpeed*deltaTime/1000;
-			if (p.controls.device.y > 4) p.rotation-= p.rotationSpeed*deltaTime/1000;
-			if (p.controls.device.y < -4) p.rotation+= p.rotationSpeed*deltaTime/1000;
+			if (p.controls.accelerate) {			
+				p.acceleration.x = p.maxAcceleration*Math.cos(p.rotation)*deltaTime/1000;
+				p.speed.x += p.acceleration.x;
+			}
+			else if (Math.abs(p.speed.x) > 0.1) p.speed.x *= 0.98; //needs to based on deltaTime
+			else p.speed.x = 0;
+			if (p.controls.accelerate) {
+				p.acceleration.y = p.maxAcceleration*Math.sin(p.rotation)*deltaTime/1000;
+				p.speed.y += p.acceleration.y;
+			} 
+			else if (Math.abs(p.speed.y) > 0.1) p.speed.y *= 0.98; //needs to based on deltaTime
+			else p.speed.y = 0;
+
+			var totalSpeed = Math.sqrt(p.speed.x*p.speed.x + p.speed.y*p.speed.y)
+			if (totalSpeed > p.maxSpeed) {
+				p.speed.x = (p.speed.x/totalSpeed)*maxSpeed;
+				p.speed.y = (p.speed.y/totalSpeed)*maxSpeed;
+			}
+
+			p.x += p.speed.x;
+			p.y += p.speed.y;
 		})
 		animate();
 		requestAnimationFrame(loop);
