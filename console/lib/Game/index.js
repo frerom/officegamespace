@@ -19,12 +19,13 @@ const Game = function (canvas, hub) {
 				right: false,
 				device: {x:0, y:0 , z:0}
 			},
-			maxAcceleration: 2,
+			maxAcceleration: 4,
 			maxSpeed: 100,
 			speed : { x: 0, y: 0 },
 			acceleration : { x: 0, y: 0 },
 			rotationSpeed: 4,
-			rotation: 0   
+			rotation: 0,
+			size: 20   
 		}));
 
 	hub.onPlayerDisconnected(color => { players = players.filter(player => player.color != color) });
@@ -80,6 +81,24 @@ const Game = function (canvas, hub) {
 
 			p.x += p.speed.x;
 			p.y += p.speed.y;
+			
+			//hitting the edge
+			if (p.x + p.size > size) {
+				p.x = size - p.size;
+				p.speed.x = 0;
+			} 
+			else if (p.x - p.size < 0) {
+				p.x = 0 + p.size;
+				p.speed.x = 0;
+			} 
+			if (p.y + p.size > size) {
+				p.y = size - p.size;
+				p.speed.y = 0;
+			} 
+			else if (p.y - p.size < 0) {
+				p.y = 0 + p.size;
+				p.speed.y = 0;
+			} 
 		})
 		animate();
 		requestAnimationFrame(loop);
@@ -94,18 +113,20 @@ const Game = function (canvas, hub) {
 
     const drawPlayer = function (player) {
       	ctx.fillStyle = player.color;
-    	drawBall(player, 20);
+    	drawBall(player, player.size);
     	ctx.save();
     	ctx.translate(player.x, player.y);
     	ctx.rotate(player.rotation);
-    	ctx.translate(8, 0);
+    	ctx.translate(player.size/2, 0);
     	ctx.fillStyle = 'black';
     	drawBall({x: 0, y: 0}, 5);
     	ctx.restore();
     }
 
 	const animate = function() {
-		ctx.clearRect(0, 0, size, size)
+		ctx.clearRect(0, 0, size, size);
+		ctx.rect(0, 0, size, size);
+		ctx.stroke();
 		players.forEach(drawPlayer)
 	}
 
